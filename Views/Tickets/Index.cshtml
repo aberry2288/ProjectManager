@@ -1,0 +1,126 @@
+﻿@using BugTracker.Data;
+@using BugTracker.Services.Interfaces;
+@model IEnumerable<BugTracker.Models.Ticket>
+@inject IBTTicketService _BTTicketService
+@inject ApplicationDbContext _context
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Tickets</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body table-responsive">
+                <h4 class="mt-0 header-title">Active Tickets</h4>
+                <p class="text-muted font-14 mb-3">
+                    All active tickets will be displayed here
+                </p>
+
+                <table id="responsive-datatable" class="table table-bordered table-bordered table-hover dt-responsive nowrap">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Title)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Created)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Updated)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Project)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.TicketPriority)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.TicketType)
+                            </th>
+                          @*  <th>
+                                @Html.DisplayNameFor(model => model.TicketStatus)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DeveloperUser)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.SubmitterUser)
+                            </th>
+                            <th></th>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Ticket? ticket in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => ticket.Title)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => ticket.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => ticket.Created)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => ticket.Updated)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => ticket.Project.Name)
+                                </td>
+                                <td>
+                                    @{
+                                        string? priority = ticket?.TicketPriority?.Name;
+                                        switch (priority)
+                                        {
+                                            case "High":
+                                                <span class="badge bg-danger">@priority</span>
+                                                break;
+                                            case "Medium":
+                                                <span class="badge bg-primary">@priority</span>
+                                                break;
+                                            case "Low":
+                                                <span class="badge bg-warning">@priority</span>
+                                                break;
+                                            case "Urgent":
+                                                <span class="badge bg-pink">@priority</span>
+                                                break;
+                                        }
+                                    }
+                                </td>
+@*                                <td>
+                                    @Html.DisplayFor(modelItem => item.TicketType.Id)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TicketStatus.Id)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DeveloperUser.Id)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SubmitterUser.Id)
+                                </td>*@
+                                <td>
+                                    <a asp-action="AssignTicket" asp-route-id="@ticket.Id">Assign</a> |
+                                    <a asp-action="Edit" asp-route-id="@ticket.Id">Edit</a> |
+                                    <a asp-action="Details" asp-route-id="@ticket.Id">Details</a> |
+                                    <a asp-action="Delete" asp-route-id="@ticket.Id">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

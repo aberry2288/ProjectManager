@@ -1,0 +1,560 @@
+﻿@using BugTracker.Models.Enums;
+@model DashboardViewModel
+@inject IBTNotificationService _NotificationService
+@inject IBTTicketService _TicketService
+@inject UserManager<BTUser> _UserManager
+
+@{
+    IEnumerable<Notification> notifications = await _NotificationService.GetNotificationsByUserIdAsync(_UserManager.GetUserId(User));
+}
+<div class="row">
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="dropdown float-end">
+                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="mdi mdi-dots-vertical"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <!-- item-->
+                        <a asp-action="Index" asp-controller="Projects" class="dropdown-item">See Projects</a>
+                    </div>
+                </div>
+
+                <h4 class="header-title mt-0 mb-4">Total Projects</h4>
+
+                <div class="widget-chart-1">
+                    <div class="widget-chart-box-1 float-start" dir="ltr">
+                        <input data-plugin="knob" data-width="70" data-height="70" data-fgColor="#f05050 "
+                               data-bgColor="#F9B9B9" value="@Model.Projects.Count"
+                               data-skin="tron" data-angleOffset="180" data-readOnly=true
+                               data-thickness=".15" />
+                    </div>
+
+                    <div class="widget-detail-1 text-end">
+                        <h2 class="fw-normal pt-2 mb-1">@Model.Projects?.Count</h2>
+                        <p class="text-muted mb-1"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- end col -->
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="dropdown float-end">
+                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="mdi mdi-dots-vertical"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <!-- item-->
+                        <a asp-action="Index" asp-controller="Tickets" class="dropdown-item">See Tickets</a>
+                        <!-- item-->
+
+                    </div>
+                </div>
+
+                <h4 class="header-title mt-0 mb-4">Total Tickets</h4>
+
+                <div class="widget-box-2">
+                    <div class="widget-detail-2 text-end">
+                        <span class="badge bg-success rounded-pill float-start mt-3"><i class="mdi mdi-trending-up"></i> </span>
+                        <h2 class="fw-normal mb-1"> @Model.Tickets.Count </h2>
+                        <p class="text-muted mb-3"></p>
+                    </div>
+                    <div class="progress progress-bar-alt-success progress-sm">
+                        <div class="progress-bar bg-success" role="progressbar"
+                             aria-valuenow="77" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 77%;">
+                            <span class="visually-hidden">77% Complete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- end col -->
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="dropdown float-end">
+                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="mdi mdi-dots-vertical"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <!-- item-->
+                        <a asp-action="Index" asp-controller="Projects" class="dropdown-item">See Projects</a>
+
+                    </div>
+                </div>
+
+                <h4 class="header-title mt-0 mb-4">Completed Projects</h4>
+
+                <div class="widget-chart-1">
+                    <div class="widget-chart-box-1 float-start" dir="ltr">
+                        <input data-plugin="knob" data-width="70" data-height="70" data-fgColor="#ffbd4a"
+                               data-bgColor="#FFE6BA" value="@(Model.Projects.Where(p => DateTime.Now > p.EndDate).Count())"
+                               data-skin="tron" data-angleOffset="180" data-readOnly=true
+                               data-thickness=".15" />
+                    </div>
+                    <div class="widget-detail-1 text-end">
+                        <h2 class="fw-normal pt-2 mb-1">
+                            @{
+                                @(Model.Projects.Where(p => DateTime.Now > p.EndDate).Count())
+                            }
+                        </h2>
+                        <p class="text-muted mb-1"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- end col -->
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="dropdown float-end">
+                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="mdi mdi-dots-vertical"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <!-- item-->
+                        <a asp-action="Index" asp-controller="Invites" class="dropdown-item">Invite Members</a>
+
+                    </div>
+                </div>
+
+                <h4 class="header-title mt-0 mb-4">Company Members</h4>
+
+                <div class="widget-box-2">
+                    <div class="widget-detail-2 text-end">
+                        <span class="badge bg-pink rounded-pill float-start mt-3"><i class="mdi mdi-trending-up"></i> </span>
+                        <h2 class="fw-normal mb-1">
+                            @Model.Members.Count
+                        </h2>
+                        <p class="text-muted mb-3"></p>
+                    </div>
+                    <div class="progress progress-bar-alt-pink progress-sm">
+                        <div class="progress-bar bg-pink" role="progressbar"
+                             aria-valuenow="77" aria-valuemin="0" aria-valuemax="100"
+                             style="width: 77%;">
+                            <span class="visually-hidden">77% Complete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- end col -->
+
+</div>
+<!-- end row -->
+
+<div class="row">
+    <div class="col-xl-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="dropdown float-end">
+                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="mdi mdi-dots-vertical"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <!-- item-->
+                        <a asp-action="Index" asp-controller="Tickets" class="dropdown-item">See Tickets</a>
+
+                    </div>
+                </div>
+
+                <h4 class="header-title mt-0">Ticket Priorities</h4>
+
+                <div class="widget-chart text-center">
+                    <div id="morrisTicketPriority" dir="ltr" style="height: 245px;" class="morris-chart"></div>
+                    <ul class="list-inline chart-detail-list mb-0">
+                        <li class="list-inline-item">
+                            <h5 style="color: rgb(0, 136, 204);"><i class="fa fa-circle me-1"></i>Low</h5>
+                        </li>
+                        <li class="list-inline-item">
+                            <h5 style="color: rgb(115, 75, 169);"><i class="fa fa-circle me-1"></i>Medium</h5>
+                        </li>
+                        <li class="list-inline-item">
+                            <h5 style="color: rgb(227, 97, 89);"><i class="fa fa-circle me-1"></i>High</h5>
+                        </li>
+                        <li class="list-inline-item">
+                            <h5 style="color: rgb(255, 153, 59);"><i class="fa fa-circle me-1"></i>Urgent</h5>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div><!-- end col -->
+    <div class="col-xl-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="dropdown float-end">
+                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="mdi mdi-dots-vertical"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <!-- item-->
+                        <a asp-action="Index" asp-controller="Projects" class="dropdown-item">See Projects</a>
+
+                    </div>
+                </div>
+
+                <h4 class="header-title mt-0">Project Priorities</h4>
+
+                <div class="widget-chart text-center">
+                    <div id="morrisProjectPriority" dir="ltr" style="height: 245px;" class="morris-chart"></div>
+                    <ul class="list-inline chart-detail-list mb-0">
+                        <li class="list-inline-item">
+                            <h5 style="color: rgb(0, 136, 204);"><i class="fa fa-circle me-1"></i>Low</h5>
+                        </li>
+                        <li class="list-inline-item">
+                            <h5 style="color: rgb(115, 75, 169);"><i class="fa fa-circle me-1"></i>Medium</h5>
+                        </li>
+                        <li class="list-inline-item">
+                            <h5 style="color: rgb(227, 97, 89);"><i class="fa fa-circle me-1"></i>High</h5>
+                        </li>
+                        <li class="list-inline-item">
+                            <h5 style="color: rgb(255, 153, 59);"><i class="fa fa-circle me-1"></i>Urgent</h5>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div><!-- end col -->
+
+    <div class="col-xl-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="dropdown float-end">
+                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="mdi mdi-dots-vertical"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <!-- item-->
+                        <a asp-action="Index" asp-controller="Tickets" class="dropdown-item">See Tickets</a>
+                    </div>
+                </div>
+
+                <h4 class="header-title mb-3">Ticket Update Notifications</h4>
+
+                <div class="inbox-widget">
+                    @foreach (Notification notification in notifications.OrderByDescending(n => n.Created).Take(4))
+                    {
+                        <div class="inbox-item">
+                            <a asp-action="Details" asp-controller="Tickets" asp-route-id="@notification.TicketId">
+                                <div class="inbox-item-img"><img src="assets/images/users/user-1.jpg" class="rounded-circle" alt=""></div>
+                                <h5 class="inbox-item-author mt-0 mb-1">@notification.Sender?.FullName</h5>
+                                <p class="inbox-item-text">@notification.Message</p>
+                                <p class="inbox-item-date">@notification.Created</p>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div><!-- end col -->
+</div>
+<div class="row">
+    <div class="col-xl-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="dropdown float-end">
+                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="mdi mdi-dots-vertical"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <!-- item-->
+                        <a asp-action="Index" asp-controller="Tickets" class="dropdown-item">See Tickets</a>
+
+                    </div>
+                </div>
+
+                <h4 class="header-title mb-3">Urgent Tickets</h4>
+
+                <div class="inbox-widget">
+                    @foreach (Ticket ticket in (await _TicketService.GetTicketsByPriorityAsync(BTTicketPriorities.Urgent, User.Identity.GetCompanyId())).OrderByDescending(t => t.Created).Take(4))
+                    {
+                        <div class="inbox-item">
+                            <a asp-action="Details" asp-controller="Tickets" asp-route-id="@ticket.Id">
+                                <div class="inbox-item-img"><img src="assets/images/users/user-1.jpg" class="rounded-circle" alt=""></div>
+                                <h5 class="inbox-item-author mt-0 mb-1">@ticket.Title</h5>
+                                <p class="inbox-item-text">@ticket.DeveloperUser?.FullName</p>
+                                <p class="inbox-item-date">@ticket.Created</p>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div><!-- end col -->
+    @*   <div class="col-xl-4">
+    <div class="card">
+    <div class="card-body">
+    <div class="dropdown float-end">
+    <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="mdi mdi-dots-vertical"></i>
+    </a>
+    <div class="dropdown-menu dropdown-menu-end">
+    <!-- item-->
+    <a href="javascript:void(0);" class="dropdown-item">Action</a>
+    <!-- item-->
+    <a href="javascript:void(0);" class="dropdown-item">Another action</a>
+    <!-- item-->
+    <a href="javascript:void(0);" class="dropdown-item">Something else</a>
+    <!-- item-->
+    <a href="javascript:void(0);" class="dropdown-item">Separated link</a>
+    </div>
+    </div>
+    <h4 class="header-title mt-0">Total Revenue</h4>
+    <div id="morris-line-example" dir="ltr" style="height: 280px;" class="morris-chart"></div>
+    </div>
+    </div>
+    </div><!-- end col -->
+    </div>*@
+    <!-- end row -->
+    @*<div class="row">
+    <div class="col-xl-3 col-md-6">
+    <div class="card">
+    <div class="card-body widget-user">
+    <div class="d-flex align-items-center">
+    <div class="flex-shrink-0 avatar-lg me-3">
+    <img src="~/adminto/dist/assets/images/users/user-3.jpg" class="img-fluid rounded-circle" alt="user">
+    </div>
+    <div class="flex-grow-1 overflow-hidden">
+    <h5 class="mt-0 mb-1">Chadengle</h5>
+    <p class="text-muted mb-2 font-13 text-truncate">coderthemes@gmail.com</p>
+    <small class="text-warning"><b>Admin</b></small>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    </div><!-- end col -->
+
+    <div class="col-xl-3 col-md-6">
+    <div class="card">
+    <div class="card-body widget-user">
+    <div class="d-flex align-items-center">
+    <div class="flex-shrink-0 avatar-lg me-3">
+    <img src="~/adminto/dist/assets/images/users/user-2.jpg" class="img-fluid rounded-circle" alt="user">
+    </div>
+    <div class="flex-grow-1 overflow-hidden">
+    <h5 class="mt-0 mb-1"> Michael Zenaty</h5>
+    <p class="text-muted mb-2 font-13 text-truncate">coderthemes@gmail.com</p>
+    <small class="text-pink"><b>Support Lead</b></small>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    </div><!-- end col -->
+
+    <div class="col-xl-3 col-md-6">
+    <div class="card">
+    <div class="card-body widget-user">
+    <div class="d-flex align-items-center">
+    <div class="flex-shrink-0 avatar-lg me-3">
+    <img src="~/adminto/dist/assets/images/users/user-1.jpg" class="img-fluid rounded-circle" alt="user">
+    </div>
+    <div class="flex-grow-1 overflow-hidden">
+    <h5 class="mt-0 mb-1">Stillnotdavid</h5>
+    <p class="text-muted mb-2 font-13 text-truncate">coderthemes@gmail.com</p>
+    <small class="text-success"><b>Designer</b></small>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    </div><!-- end col -->
+
+    <div class="col-xl-3 col-md-6">
+    <div class="card">
+    <div class="card-body widget-user">
+    <div class="d-flex align-items-center">
+    <div class="flex-shrink-0 avatar-lg me-3">
+    <img src="~/adminto/dist/assets/images/users/user-10.jpg" class="img-fluid rounded-circle" alt="user">
+    </div>
+    <div class="flex-grow-1 overflow-hidden">
+    <h5 class="mt-0 mb-1">Tomaslau</h5>
+    <p class="text-muted mb-2 font-13 text-truncate">coderthemes@gmail.com</p>
+    <small class="text-info"><b>Developer</b></small>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    </div><!-- end col -->
+
+    </div>*@
+    <!-- end row -->
+
+
+
+
+    <div class="col-xl-8">
+        <div class="card">
+            <div class="card-body">
+                <div class="dropdown float-end">
+                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="mdi mdi-dots-vertical"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <!-- item-->
+                        <a asp-action="Index" asp-controller="Projects" class="dropdown-item">See Projects</a>
+
+                    </div>
+                </div>
+
+                <h4 class="header-title mt-0 mb-3">Latest Projects</h4>
+
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+
+                                <th>Project Name</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Status</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Project project in Model.Projects)
+                            {
+
+                                <tr>
+                                    <td><a asp-action="Details" asp-controller="Projects" asp-route-id="@project.Id">@project.Name</a></td>
+                                    <td>@project.StartDate</td>
+                                    <td>@project.EndDate</td>
+                                    <td>
+                                        @{
+                                            string? priority = project?.ProjectPriority?.Name;
+                                            switch (priority)
+                                            {
+                                                case "High":
+                                                    <span class="badge bg-danger">@priority</span>
+                                                    break;
+                                                case "Medium":
+                                                    <span class="badge bg-primary">@priority</span>
+                                                    break;
+                                                case "Low":
+                                                    <span class="badge bg-warning">@priority</span>
+                                                    break;
+                                                case "Urgent":
+                                                    <span class="badge bg-pink">@priority</span>
+                                                    break;
+                                            }
+                                        }
+                                    </td>
+
+                                </tr>
+
+                            }
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- end col -->
+</div>
+<!-- end row -->
+@section scripts{
+    <!--Morris Chart-->
+    <script src="~/adminto/assets/libs/morris.js06/morris.min.js"></script>
+    <script src="~/adminto/assets/libs/raphael/raphael.min.js"></script>
+    <!-- Dashboar init js-->
+    <script src="~/adminto/assets/js/pages/dashboard.init.js"></script>
+
+    @* Morris Donut Chart *@
+    @* <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>*@
+    <script>
+
+        var morrisDonutData = [{
+            label: "Low",
+            value: @Model.Tickets.Where(t=>t.TicketPriority.Name == nameof(BTTicketPriorities.Low)).Count()
+                                                            }, {
+            label: "Medium",
+            value: @Model.Tickets.Where(t=>t.TicketPriority.Name == nameof(BTTicketPriorities.Medium)).Count()
+                                                            }, {
+            label: "High",
+            value: @Model.Tickets.Where(t=>t.TicketPriority.Name == nameof(BTTicketPriorities.High)).Count()
+                                                            }, {
+            label: "Urgent",
+            value: @Model.Tickets.Where(t=>t.TicketPriority.Name == nameof(BTTicketPriorities.Urgent)).Count()
+                                                            }];
+
+
+        /*
+        Morris: Donut
+        */
+        if ($('#morrisTicketPriority').get(0)) {
+            var donutChart = Morris.Donut({
+                resize: true,
+                element: 'morrisTicketPriority',
+                data: morrisDonutData,
+                colors: ['#0088cc', '#734ba9', '#E36159', '#ff993b']
+            });
+
+            donutChart.options.data.forEach(function (label, i) {
+                var legendItem = $('<span></span>').text(label['label'] + ": " + label['value']).prepend('<span>&nbsp;</span>');
+                legendItem.find('span')
+                    .css('backgroundColor', donutChart.options.colors[i])
+                    .css('width', '20px')
+                    .css('display', 'inline-block')
+                    .css('margin', '10px');
+                $('#legend').append(legendItem)
+            });
+        };
+    </script>
+    <script>
+
+        var morrisDonutData = [{
+            label: "Low",
+            value: @Model.Projects.Where(p=>p.ProjectPriority.Name == nameof(BTTicketPriorities.Low)).Count()
+                                                                    }, {
+            label: "Medium",
+            value: @Model.Projects.Where(p=>p.ProjectPriority.Name == nameof(BTTicketPriorities.Medium)).Count()
+                                                                    }, {
+            label: "High",
+            value: @Model.Projects.Where(p=>p.ProjectPriority.Name == nameof(BTTicketPriorities.High)).Count()
+                                                                    }, {
+            label: "Urgent",
+            value: @Model.Projects.Where(p=>p.ProjectPriority.Name == nameof(BTTicketPriorities.Urgent)).Count()
+                                                                    }];
+
+
+        /*
+        Morris: Donut
+        */
+        if ($('#morrisProjectPriority').get(0)) {
+            var donutChart = Morris.Donut({
+                resize: true,
+                element: 'morrisProjectPriority',
+                data: morrisDonutData,
+                colors: ['#0088cc', '#734ba9', '#E36159', '#ff993b']
+            });
+
+            donutChart.options.data.forEach(function (label, i) {
+                var legendItem = $('<span></span>').text(label['label'] + ": " + label['value']).prepend('<span>&nbsp;</span>');
+                legendItem.find('span')
+                    .css('backgroundColor', donutChart.options.colors[i])
+                    .css('width', '20px')
+                    .css('display', 'inline-block')
+                    .css('margin', '10px');
+                $('#legend').append(legendItem)
+            });
+        };
+    </script>
+
+}
