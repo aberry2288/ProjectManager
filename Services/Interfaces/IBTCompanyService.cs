@@ -7,5 +7,7 @@ namespace BugTracker.Services.Interfaces
         public Task<List<BTUser>> GetMembersAsync(int? companyId);
 
         public Task<Company> GetCompanyInfoAsync(int? companyId);
+
+        public Task ClearNotificationsByUserIdAsync(string? userId);
     }
 }

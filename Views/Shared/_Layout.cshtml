@@ -15,7 +15,7 @@
         company = await BTCompanyService.GetCompanyInfoAsync(User.Identity!.GetCompanyId());
     }
     
-    IEnumerable<Notification> notifications = await _NotificationService.GetNotificationsByUserIdAsync(_UserManager.GetUserId(User));
+    IEnumerable<Notification> notifications = (await _NotificationService.GetNotificationsByUserIdAsync(_UserManager.GetUserId(User))).Where(n => n.HasBeenViewed == false);
 
 }
 
@@ -144,9 +144,9 @@
                         <div class="dropdown-item noti-title">
                             <h5 class="m-0">
                                 <span class="float-end">
-                                    <a   class="text-dark">
-                                        <small>Clear All</small>
-                                    </a>
+                                    <form asp-action="ClearNotifications" asp-controller="Companies" method="post"   class="text-dark">
+                                        <button type="submit"> <small>Clear All</small> </button>
+                                    </form>
                                 </span> Ticket Notifications
                             </h5>
                         </div>
@@ -229,7 +229,7 @@
                         <img src="~/img/Tree Styled Green.png" alt="" height="50">
                     </span>
                 </a>
-                <a href="index.html" class="logo logo-dark text-center">
+                <a asp-area="Identity" asp-page="/Account/Manage/Index" class="logo logo-dark text-center">
                     <span class="logo-sm">
                         <img src="~/img/Tree Styled White.png" alt="" height="22">
                     </span>
@@ -240,11 +240,11 @@
             </div>
 
             <ul class="list-unstyled topnav-menu topnav-menu-left mb-0">
-                <li>
+            @*    <li>
                     <button class="button-menu-mobile disable-btn waves-effect">
                         <i class="fe-menu"></i>                        
                     </button>
-                </li>
+                </li>*@
 
                 <li>
                     <a asp-action="AdmintoIndex" asp-controller="Home"> </a>
@@ -265,7 +265,7 @@
                 <!-- User box -->
                 <div class="user-box text-center">
 
-                    <img src="@_BTFileService.ConvertByteArrayToFile(btUser?.ImageData!, btUser?.ImageType!, DefaultImage.BTUserImage)" alt="user-img" title="Mat Helme" class="rounded-circle img-thumbnail avatar-md">
+                    <img src="@_BTFileService.ConvertByteArrayToFile(btUser?.ImageData!, btUser?.ImageType!, DefaultImage.BTUserImage)" alt="user-img" title="@btUser?.FullName" class="rounded-circle img-thumbnail avatar-md">
                     <div class="dropdown">
                         <a href="#" class="user-name dropdown-toggle h5 mt-2 mb-1 d-block" data-bs-toggle="dropdown" aria-expanded="false">@company?.Name</a>
                         <div class="dropdown-menu user-pro-dropdown">

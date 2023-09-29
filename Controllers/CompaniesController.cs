@@ -103,6 +103,25 @@ namespace BugTracker.Controllers
             return RedirectToAction(nameof(ManageUserRoles));
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ClearNotifications()
+        {
+            try
+            {
+                string? userId = _userManager.GetUserId(User);
+
+                await _companyService.ClearNotificationsByUserIdAsync(userId);
+
+                return RedirectToAction("AdmintoIndex", "Home");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
         // GET: Companies/Details/5
         public async Task<IActionResult> Details()
         {
